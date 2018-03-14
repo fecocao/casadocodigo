@@ -28,8 +28,8 @@ public class AppWebConfiguration {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 		resolver.setPrefix("/WEB-INF/views/");
 		resolver.setSuffix(".jsp");
-		resolver.setExposedContextBeanNames("carrinhoCompras");
-		return resolver;
+		resolver.setExposedContextBeanNames("carrinhoCompras");//dizendo que meu Bean "carrinhoCompra" estará disponível na JSP
+		return resolver;										//mesmo nome da classe porém com a primeira letra minúscula
 	}
 	
 	@Bean

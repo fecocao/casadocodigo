@@ -61,6 +61,6 @@ public class CarrinhoItem {
 	}
 
 	public BigDecimal getTotal(int quantidade) {
-		return this.getPreco().multiply(new BigDecimal(quantidade));
+		return this.getPreco().multiply(new BigDecimal(quantidade));//pega o preço e múltiplica pela quantidade
 	}
 }

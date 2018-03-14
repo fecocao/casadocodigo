@@ -16,8 +16,8 @@ import br.com.casadocodigo.loja.models.TipoPreco;
 
 @Controller
 @RequestMapping("/carrinho")
-@Scope(value=WebApplicationContext.SCOPE_REQUEST)
-public class CarrinhoComprasController {
+@Scope(value=WebApplicationContext.SCOPE_REQUEST)//a cada Request da nossa aplicação, precisa ser criado um novo SCOPE
+public class CarrinhoComprasController {		//OU SEJA, cada usuário tem sua própria sessão e seu próprio carrinho
 	
 	@Autowired
 	private CarrinhoCompras carrinho;
@@ -30,18 +30,18 @@ public class CarrinhoComprasController {
 		System.out.println(produtoId);
 		System.out.println(tipoPreco);
 		ModelAndView modelAndView = new ModelAndView("redirect:/carrinho");
-		CarrinhoItem carrinhoItem = criaItem(produtoId, tipoPreco);
-		carrinho.add(carrinhoItem);
+		CarrinhoItem carrinhoItem = criaItem(produtoId, tipoPreco);//pegando o produto e colocando no carrinho
+		carrinho.add(carrinhoItem);  
 		return modelAndView;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView itens(){
-		return new ModelAndView("/carrinho/itens");
+		return new ModelAndView("carrinho/itens");
 	}
 	
 	private CarrinhoItem criaItem(Integer produtoId, TipoPreco tipo){
-		Produto produto = produtoDao.find(produtoId);
+		Produto produto = produtoDao.find(produtoId);		
 		CarrinhoItem carrinhoItem = new CarrinhoItem(produto, tipo);
 		return carrinhoItem;
 	}

@@ -65,6 +65,7 @@
 
 	<section class="container middle">
 		<h2 id="cart-title">Seu carrinho de compras</h2>
+		
 
 
 		<table id="cart-table">
@@ -94,12 +95,14 @@
 					<td class="item-title">${item.produto.titulo}</td>
 					<td class="numeric-cell">${item.preco}</td>
 					<td class="quantity-input-cell">
-						<input type="number" min="0" readonly="readonly" id="quantidade" name="quantidade" value="${carrinhoCompras.getQuantidade(item) }" />
+						<input type="number" min="0" id="quantidade" name="quantidade" 
+						value="${carrinhoCompras.getQuantidade(item) }" />
 					</td>
 					<td class="numeric-cell">${carrinhoCompras.getTotal(item)}</td>
 					<td class="remove-item">
 						<form action="${s:mvcUrl('CCC#remover').arg(0, item.produto.id).arg(1, item.tipoPreco).build() }" method="post">
-							<input type="image" src="/excluir.png" alt="Excluir" title="Excluir" />
+							<input type="image" src="http:////cdn.shopify.com/s/files/1/0155/7645/t/177/assets/excluir.png?1575580795780530083" 
+								alt="Excluir" title="Excluir" />
 						</form>
 					</td>
 				</tr>
@@ -107,12 +110,8 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="3">
-						<form action="${s:mvcUrl('PC#finalizar').build()}" method="post">
-							<input type="submit" class="checkout" name="checkout" value="Finalizar compra" />
-						</form>
-					</td>
-					<td class="numeric-cell">${carrinhoCompras.total}</td>
+					<td colspan="3"><input type="submit" class="checkout" name="checkout" value="Finalizar compra" /></td>				
+					<td class="numeric-cell">${carrinhoCompras.total }</td>
 					<td></td>
 				</tr>
 			</tfoot>

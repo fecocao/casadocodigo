@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 	
 	@RequestMapping("/")
-	public String index() { //ANOTATION
-		System.out.println("Entrando na HOME da CDS");
-		return "home"; // retornando a tela de inicialização
+	public String index(){
+		System.out.println("Entrando na home da CDC");
+		return "home";
 	}
 
 }

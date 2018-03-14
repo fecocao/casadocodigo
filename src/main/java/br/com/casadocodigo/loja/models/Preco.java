@@ -4,12 +4,10 @@ import java.math.BigDecimal;
 
 import javax.persistence.Embeddable;
 
-@Embeddable // indicando que o preço vai ser colocado no meu produto
+@Embeddable
 public class Preco {
-	
 	private BigDecimal valor;
 	private TipoPreco tipo;
-	
 	
 	public BigDecimal getValor() {
 		return valor;

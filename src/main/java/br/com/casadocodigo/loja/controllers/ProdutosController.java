@@ -1,8 +1,8 @@
 package br.com.casadocodigo.loja.controllers;
 
 import java.util.List;
-import javax.validation.Valid;
 
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import br.com.casadocodigo.loja.dao.ProdutoDAO;
+
+import br.com.casadocodigo.loja.daos.ProdutoDAO;
 import br.com.casadocodigo.loja.infra.FileSaver;
 import br.com.casadocodigo.loja.models.Produto;
 import br.com.casadocodigo.loja.models.TipoPreco;
@@ -26,63 +27,53 @@ import br.com.casadocodigo.loja.validation.ProdutoValidation;
 public class ProdutosController {
 	
 	@Autowired
-	private FileSaver fileSaver;
+	private ProdutoDAO produtoDao;
 	
 	@Autowired
-	private ProdutoDAO produtoDAO;//injetar o produtoDAO
+	private FileSaver fileSaver;
 	
 	@InitBinder
-	public void initBinder(WebDataBinder binder) {//liga meu validador com meu validador de produto
+	public void InitBinder(WebDataBinder binder){
 		binder.addValidators(new ProdutoValidation());
-		
 	}
 	
 	@RequestMapping("/form")
-	public ModelAndView form(Produto produto) {
-		
-		ModelAndView modelAndView = new ModelAndView("produtos/form");//objeto possui a informação pra adicionar o objeto obs(passa a view"produtos/form" no construtor)
-		modelAndView.addObject("tipos", TipoPreco.values()); // retornando todos os tipos do meu objeto TipoPreco para a VIEW
-		
+	public ModelAndView form(Produto produto){
+		ModelAndView modelAndView = new ModelAndView("produtos/form");
+		modelAndView.addObject("tipos", TipoPreco.values());
 		return modelAndView;
-		
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView grava(MultipartFile sumario, @Valid Produto produto, BindingResult result, RedirectAttributes redirectAttribute) { //pega o que foi informado no JSP de acordo com os nomes
+	public ModelAndView gravar(MultipartFile sumario, @Valid Produto produto, BindingResult result,  RedirectAttributes redirectAttributes){
 		
-		if(result.hasErrors()) {
-			return form(produto); 
+		if(result.hasErrors()){
+			return form(produto);
 		}
 		
-		String path = fileSaver.write("arquivos-sumario", sumario);		
+		String path = fileSaver.write("arquivos-sumario", sumario);
 		produto.setSumarioPath(path);
 		
-		produtoDAO.gravar(produto); 
-		
-		redirectAttribute.addFlashAttribute("sucesso", "Produto cadastrado com sucesso"); // adicionando "sucesso" à nossa página
-													//redirect after POST (redirecionar para outra página após aplicar o POST)
-		return new ModelAndView("redirect:produtos");// redirecionando para "produtos"	após gravar os dados do livro			
-		
+		produtoDao.gravar(produto);
+		redirectAttributes.addFlashAttribute("message","Produto cadastrado com sucesso");
+		return new ModelAndView("redirect:produtos");
 	}
+	
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public ModelAndView listar() {
-		List<Produto> produtos = produtoDAO.listar();
-		
-		ModelAndView modelAndView = new ModelAndView("produtos/lista");
+	public ModelAndView listar(){
+		List<Produto> produtos = produtoDao.listar();
+		ModelAndView modelAndView = new ModelAndView("/produtos/lista");
 		modelAndView.addObject("produtos", produtos);
-		
 		return modelAndView;
 	}
 	
-	@RequestMapping("/detalhe")
-	public ModelAndView detalhe(Integer id) {
-		ModelAndView modelAndView = new ModelAndView("produtos/detalhe");
-		Produto produto =  produtoDAO.find(id);
+	@RequestMapping("/detalhe/{id}")
+	public ModelAndView detalhe(@PathVariable("id") Integer id){
+		ModelAndView modelAndView = new ModelAndView("/produtos/detalhe");
+		Produto produto = produtoDao.find(id);
 		modelAndView.addObject("produto", produto);
-		
 		return modelAndView;
 	}
-	
 	
 }

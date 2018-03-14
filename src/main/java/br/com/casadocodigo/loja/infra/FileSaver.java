@@ -10,19 +10,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
-public class FileSaver { // salvar arquivo no disco
-	
+public class FileSaver {
 	@Autowired
-	private HttpServletRequest request; 
+	private HttpServletRequest request;
 	
-	public String write(String baseFolder, MultipartFile file) {//Local onde desejo transferir meu arquivo enviado
+	public String write(String baseFolder, MultipartFile file) {
 		try {
-			
-			String realPath = request.getServletContext().getRealPath("/" + baseFolder);		
+			String realPath = request.getServletContext().getRealPath("/"+baseFolder);
 			String path = realPath + "/" + file.getOriginalFilename();
 			file.transferTo(new File(path));
-			return baseFolder + "/" + file.getOriginalFilename();//caminho relativo ao meu arquivo
-			
+			return baseFolder + "/" + file.getOriginalFilename();
+
 		} catch (IllegalStateException | IOException e) {
 			throw new RuntimeException(e);
 		}

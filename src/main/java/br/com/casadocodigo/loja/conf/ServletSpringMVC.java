@@ -1,14 +1,12 @@
 package br.com.casadocodigo.loja.conf;
 
+import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration.Dynamic;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import br.com.casadocodigo.loja.controllers.JPAConfiguration;
-
-//classe que faz as configurações básicas do Spring
-
 
 public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletInitializer{
 
@@ -19,20 +17,24 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class[] {AppWebConfiguration.class, JPAConfiguration.class}; // pegando minhas classes de configuração
+		return new Class[] {AppWebConfiguration.class, JPAConfiguration.class};
 	}
 
 	@Override
 	protected String[] getServletMappings() {
-	
-		return new String[] {"/"}; // mapeando o Servlet do Spring (tudo o que vier após o "/")
+		return new String[] {"/"};
 	}
 	
 	@Override
-	protected void customizeRegistration(Dynamic registration) {//configurando envio de arquivos
-		registration.setMultipartConfig(new MultipartConfigElement(""));
-		//dizendo que do jeito que eu recebo o arquivo, eu quero enviá-lo para o servidor
+	protected Filter[] getServletFilters() {
+		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+		encodingFilter.setEncoding("UTF-8");
+		return new Filter[] {encodingFilter};
 	}
 	
-	
+	@Override
+	protected void customizeRegistration(Dynamic registration) {
+		registration.setMultipartConfig(new MultipartConfigElement(""));
+	}
+
 }

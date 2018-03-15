@@ -29,11 +29,15 @@ public class PagamentoController {
 	RestTemplate restTemplate;
 	
 	@RequestMapping(value="/finalizar", method=RequestMethod.POST)
-	public Callable<ModelAndView> finalizar(RedirectAttributes model){
-		return () -> {
+	public Callable<ModelAndView> finalizar(RedirectAttributes model){//Callable faz com que o servidor se comporte de forma assíncrona
+		return () -> {//classe anônima
 			try {
-				String uri = "http://book-payment.herokuapp.com/payment";
-				String response = restTemplate.postForObject(uri, new DadosPagamento(carrinho.getTotal()), String.class);
+				String uri = "http://book-payment.herokuapp.com/payment"; //minha uri  
+				
+				//resTemplate tem a responsabilidade de realizar requisições, GET, POST etc.."Senhor de Integração"
+				String response = restTemplate.postForObject(uri, new DadosPagamento(carrinho.getTotal()), String.class);//realizando pagamento via POST
+														  //URL,  OBJETO QUE DESEJO ENVIAR,              tipo de classe de resposta
+							
 				model.addFlashAttribute("message", response);
 				System.out.println(response);
 				return new ModelAndView("redirect:/produtos");

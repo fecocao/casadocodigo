@@ -56,7 +56,7 @@ public class AppWebConfiguration {
 		return new StandardServletMultipartResolver();
 	}
 	
-	@Bean
+	@Bean // configurando meu RestTemplate para o Spring encontrá-lo
 	public RestTemplate restTemplate(){
 		return new RestTemplate();
 	}
